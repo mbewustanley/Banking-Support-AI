@@ -1,0 +1,26 @@
+# Secrets
+.env
+.env.*
+
+# Allow an example configuration to be committed later
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+
+# Generated data
+data/raw/*
+data/processed/*
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+README.2.md
