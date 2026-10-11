@@ -1,0 +1,28 @@
+
+[
+  {
+    "id": "RET-001",
+    "question": "Can a foreign transaction fee apply to a card purchase?",
+    "relevant_sources": ["card_fees.md"]
+  },
+  {
+    "id": "RET-002",
+    "question": "What should I do if my card was charged twice?",
+    "relevant_sources": ["card_fees.md"]
+  },
+  {
+    "id": "RET-003",
+    "question": "Is a fee refund automatic?",
+    "relevant_sources": ["card_fees.md", "refunds.md"]
+  },
+  {
+    "id": "RET-004",
+    "question": "Does requesting a refund guarantee approval?",
+    "relevant_sources": ["refunds.md"]
+  },
+  {
+    "id": "RET-005",
+    "question": "What happens if support needs more information?",
+    "relevant_sources": ["refunds.md"]
+  }
+]

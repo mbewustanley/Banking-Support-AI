@@ -1,26 +1,24 @@
-# Secrets
-.env
-.env.*
+# Local data and generated artifacts
+data/
 
-# Allow an example configuration to be committed later
-!.env.example
-
-# Python
+# Python caches and test artifacts
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.ruff_cache/
 
-# Environments
-.venv/
-venv/
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
 
-# Generated data
-data/raw/*
-data/processed/*
-
-# Editor and operating-system files
+# IDE files
 .vscode/
 .idea/
+
+# OS files
 .DS_Store
+
+# Local README backup
 README.2.md
+
+reports/

@@ -1,0 +1,125 @@
+
+{
+  "dataset_name": "banking_support_generation_eval",
+  "version": "1.0",
+  "description": "Golden evaluation cases for grounded banking policy answer generation.",
+  "policy_documents": [
+    "card_fees.md",
+    "refunds.md"
+  ],
+  "cases": [
+    {
+      "id": "GEN-001",
+      "category": "duplicate_charge",
+      "question": "What should I do if my card is charged twice?",
+      "expected_facts": [
+        "Review the transaction history.",
+        "Contact customer support.",
+        "Provide the transaction dates and amounts.",
+        "A duplicate charge must be investigated before a refund is confirmed."
+      ],
+      "expected_sources": [
+        "card_fees.md"
+      ],
+      "should_abstain": false,
+      "expected_behavior": "Answer with the duplicate-charge procedure and explain that a refund requires investigation."
+    },
+    {
+      "id": "GEN-002",
+      "category": "foreign_transaction_fee",
+      "question": "Are foreign transaction fees the same for every card?",
+      "expected_facts": [
+        "A foreign transaction fee may apply to purchases in a foreign currency.",
+        "The applicable fee depends on the account terms associated with the card.",
+        "The customer can consult their account terms or contact support."
+      ],
+      "expected_sources": [
+        "card_fees.md"
+      ],
+      "should_abstain": false,
+      "expected_behavior": "Explain that fees depend on the customer's account terms without inventing a fee amount."
+    },
+    {
+      "id": "GEN-003",
+      "category": "refund_eligibility",
+      "question": "Will my fee definitely be refunded if I complain?",
+      "expected_facts": [
+        "A fee refund is not automatic.",
+        "Support must review the fee and applicable account terms.",
+        "Submitting a request does not guarantee refund approval."
+      ],
+      "expected_sources": [
+        "card_fees.md",
+        "refunds.md"
+      ],
+      "should_abstain": false,
+      "expected_behavior": "Explain the review process and avoid guaranteeing a refund."
+    },
+    {
+      "id": "GEN-004",
+      "category": "refund_timeline",
+      "question": "How many hours will it take for my refund to arrive?",
+      "expected_facts": [
+        "The policies do not specify a refund processing timeline.",
+        "Support reviews the transaction details and applicable account terms before determining the outcome."
+      ],
+      "expected_sources": [
+        "refunds.md"
+      ],
+      "should_abstain": true,
+      "expected_behavior": "Clearly state that no timeline is specified in the available policies. Do not invent a duration or imply that a refund has been approved."
+    },
+    {
+      "id": "GEN-005",
+      "category": "premature_refund_promise",
+      "question": "Can customer support promise my refund before investigating my complaint?",
+      "expected_facts": [
+        "Support must not promise that a refund has been approved before the required review is completed.",
+        "The outcome must be confirmed before approval is promised."
+      ],
+      "expected_sources": [
+        "refunds.md"
+      ],
+      "should_abstain": false,
+      "expected_behavior": "Explain that support must complete the required review and confirm the outcome before promising approval."
+    },
+    {
+      "id": "GEN-006",
+      "category": "additional_information",
+      "question": "What happens if support needs more information to decide my refund request?",
+      "expected_facts": [
+        "Support should request additional information if needed.",
+        "The additional information should be requested before a decision is made."
+      ],
+      "expected_sources": [
+        "refunds.md"
+      ],
+      "should_abstain": false,
+      "expected_behavior": "Explain that support may request more information before deciding the refund request."
+    },
+    {
+      "id": "GEN-007",
+      "category": "account_specific_information",
+      "question": "What is my current bank account balance?",
+      "expected_facts": [],
+      "expected_sources": [],
+      "should_abstain": true,
+      "expected_behavior": "Explain that the available policy documents do not contain account-specific balance information. Do not invent a balance."
+    },
+    {
+      "id": "GEN-008",
+      "category": "unsupported_policy",
+      "question": "What exact percentage of my transaction will the bank refund?",
+      "expected_facts": [
+        "The policies do not specify a refund percentage.",
+        "Refund eligibility and the outcome require review."
+      ],
+      "expected_sources": [
+        "card_fees.md",
+        "refunds.md"
+      ],
+      "should_abstain": true,
+      "expected_behavior": "State that no refund percentage is specified and explain that support must review the relevant details. Do not invent a percentage."
+    }
+  ]
+}

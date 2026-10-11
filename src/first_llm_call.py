@@ -18,7 +18,7 @@ def main() -> None:
         api_key=api_key,
         base_url="https://openrouter.ai/api/v1",
         temperature=0,
-        #max_completion_tokens=150
+        max_completion_tokens=1500
     )
 
     response = llm.invoke(
