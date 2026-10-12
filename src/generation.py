@@ -155,6 +155,10 @@ Provide a grounded answer with source citations.
 
         return "\n\n---\n\n".join(passages), retrieval_results
 
+
+
+
+    
     def answer(self, question: str) -> GenerationResult:
         """Retrieve evidence and generate a citation-validated answer."""
         if not question or not question.strip():
@@ -162,6 +166,21 @@ Provide a grounded answer with source citations.
 
         question = question.strip()
         results = self.retriever.search(question, k=self.k)
+
+        return self.answer_with_evidence(question, results)
+
+
+
+    def answer_with_evidence(
+        self,
+        question: str,
+        results: list[tuple[Document, float]],
+    ) -> GenerationResult:
+        """Generate a grounded answer using evidence already retrieved."""
+        if not question or not question.strip():
+            raise ValueError("Question cannot be empty")
+
+        question = question.strip()
 
         if not results:
             return GenerationResult(
@@ -178,20 +197,12 @@ Provide a grounded answer with source citations.
         response = self.llm.invoke(
             self.prompt.invoke(
                 {
-                    "question": question.strip(),
+                    "question": question,
                     "context": context,
                 }
             )
-
         )
-        """print("\n--- LLM DEBUG ---")
-        print("Content:", repr(response.content))
-        print("Response metadata:", response.response_metadata)
-        print("Usage metadata:", response.usage_metadata)
-        print("Additional kwargs:", response.additional_kwargs)
-        print("Tool calls:", getattr(response, "tool_calls", []))
-        print("--- END LLM DEBUG ---\n")
-"""
+
         raw_answer = response.content
 
         if not isinstance(raw_answer, str):
@@ -209,7 +220,7 @@ Provide a grounded answer with source citations.
                 f"Finish reason: {finish_reason}. "
                 "Check the output-token budget and provider response."
             )
-        
+
         if raw_answer.upper().startswith(ABSTENTION_PREFIX):
             explanation = raw_answer[len(ABSTENTION_PREFIX):].strip()
 
@@ -222,7 +233,7 @@ Provide a grounded answer with source citations.
                 retrieval_results=retrieval_results,
             )
 
-        # Only allow citations that were assigned to retrieved passages.
+        # Only allow citations assigned to retrieved passages.
         cited_ids = set(
             re.findall(r"\[(S\d+)\]", raw_answer)
         )
@@ -230,8 +241,7 @@ Provide a grounded answer with source citations.
             item["citation_id"] for item in retrieval_results
         }
 
-        # Reject unsupported or missing citations instead of silently
-        # presenting an untraceable answer as verified.
+        # Reject unsupported or missing citations.
         if not cited_ids or not cited_ids.issubset(valid_ids):
             return GenerationResult(
                 answer=(
@@ -255,6 +265,7 @@ Provide a grounded answer with source citations.
             abstained=False,
             retrieval_results=retrieval_results,
         )
+
 
 
 if __name__ == "__main__":
