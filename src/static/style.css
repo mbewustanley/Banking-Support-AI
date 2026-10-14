@@ -1,0 +1,162 @@
+
+:root {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #172b46;
+    background: #f3f6fb;
+    font-synthesis: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+}
+
+header {
+    padding: 24px clamp(20px, 5vw, 64px);
+    color: white;
+    background: #15345b;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+header p {
+    margin: 7px 0 0;
+    color: #d2deee;
+    font-size: 0.9rem;
+}
+
+main {
+    width: min(900px, calc(100% - 32px));
+    margin: 36px auto;
+}
+
+section {
+    margin-bottom: 22px;
+    padding: 24px;
+    background: white;
+    border: 1px solid #e1e8f1;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgb(25 48 78 / 5%);
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 1.15rem;
+}
+
+section p {
+    color: #62728a;
+    line-height: 1.6;
+}
+
+#chat-messages {
+    min-height: 90px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding: 12px 0;
+}
+
+.message {
+    width: fit-content;
+    max-width: 90%;
+    margin: 12px 0;
+    padding: 12px 15px;
+    border-radius: 12px;
+    background: #edf4ff;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+.message.user {
+    margin-left: auto;
+    color: white;
+    background: #204e83;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    resize: vertical;
+    padding: 13px;
+    color: inherit;
+    background: white;
+    border: 1px solid #cbd6e4;
+    border-radius: 10px;
+    line-height: 1.5;
+}
+
+textarea:focus {
+    outline: 3px solid #dceaff;
+    border-color: #3975bc;
+}
+
+button {
+    margin-top: 12px;
+    padding: 11px 18px;
+    color: white;
+    background: #204e83;
+    border: 0;
+    border-radius: 9px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #163a65;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+#sources {
+    display: grid;
+    gap: 10px;
+}
+
+.source-item {
+    padding: 13px;
+    background: #f7f9fc;
+    border: 1px solid #e1e8f1;
+    border-radius: 10px;
+    overflow-wrap: anywhere;
+}
+
+.source-item strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.source-item small {
+    color: #62728a;
+}
+
+@media (max-width: 600px) {
+    main {
+        margin-top: 20px;
+    }
+
+    section {
+        padding: 18px;
+    }
+
+    header {
+        padding: 20px;
+    }
+}

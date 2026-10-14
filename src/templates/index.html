@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Support AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/app.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Banking Support AI</h1>
+        <p>Policy-grounded customer support</p>
+    </header>
+
+    <main>
+        <section aria-labelledby="welcome-heading">
+            <h2 id="welcome-heading">How can we help?</h2>
+            <p>
+                Ask a question about banking policies, card fees, or refunds.
+            </p>
+        </section>
+
+        <section aria-label="Conversation">
+            <div id="chat-messages" aria-live="polite">
+                <p>Your conversation will appear here.</p>
+            </div>
+
+            <form id="chat-form">
+                <label for="question">Your question</label>
+                <textarea
+                    id="question"
+                    name="question"
+                    rows="3"
+                    maxlength="2000"
+                    placeholder="For example, what happens if I am charged twice?"
+                    required
+                ></textarea>
+
+                <button type="submit" id="send-button">
+                    Send question
+                </button>
+            </form>
+        </section>
+
+        <section aria-labelledby="sources-heading">
+            <h2 id="sources-heading">Sources</h2>
+            <div id="sources">
+                <p>Policy references will appear here.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

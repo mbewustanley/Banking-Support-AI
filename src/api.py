@@ -2,18 +2,22 @@
 
 
 ####### TO RUN
-# uvicorn src.api:api --reload
-
-
+# uvicorn src.api:app --reload
+import logging
+from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
 from pydantic import BaseModel, Field, field_validator
 
 from contextlib import asynccontextmanager
 
 from src.service import BankingSupportService
 
+logger = logging.getLogger(__name__)
 
 # creates a service when the application starts and releases the reference when it shuts down.
 @asynccontextmanager
@@ -32,6 +36,20 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan
 )
+
+
+BASE_DIR = Path(__file__).resolve().parent
+
+app.mount(
+    "/static",
+    StaticFiles(directory=BASE_DIR / "static"),
+    name="static"
+)
+
+
+@app.get("/", include_in_schema=False)
+def home() -> FileResponse:
+    return FileResponse(BASE_DIR / "templates" / "index.html")
 
 
 class ChatRequest(BaseModel):
@@ -75,7 +93,13 @@ def chat(
     """Answer a customer question using banking policy evidence."""
     try:
         service = request.app.state.support_service
+
+        logger.info("Starting support request")
+
         result = service.ask(chat_request.question)
+
+        logger.info("Support request completed")
+        
         return ChatResponse(**result)
 
     except ValueError as exc:
@@ -85,6 +109,8 @@ def chat(
         ) from exc
 
     except Exception as exc:
+        logger.exception("Failed to process banking support question")
+
         raise HTTPException(
             status_code=500,
             detail=(
