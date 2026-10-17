@@ -1,55 +1,279 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banking Support AI</title>
+    <meta name="theme-color" content="#102b49">
+    <meta name="description" content="Policy-grounded banking customer support workspace.">
+    <title>Banking Support Intelligence</title>
     <link rel="stylesheet" href="/static/style.css">
     <script src="/static/app.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1>Banking Support AI</h1>
-        <p>Policy-grounded customer support</p>
-    </header>
+    <div class="app-shell">
 
-    <main>
-        <section aria-labelledby="welcome-heading">
-            <h2 id="welcome-heading">How can we help?</h2>
-            <p>
-                Ask a question about banking policies, card fees, or refunds.
-            </p>
-        </section>
+        <!-- Application header -->
+        <header class="topbar">
+            <a class="brand" href="/" aria-label="Banking Support Intelligence home">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M3 9h18L12 4 3 9Z" stroke="currentColor"
+                              stroke-width="1.7" stroke-linejoin="round"/>
+                        <path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"
+                              stroke="currentColor" stroke-width="1.7"
+                              stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <span class="brand-copy">
+                    <strong>Banking Support</strong>
+                    <span>INTELLIGENCE PLATFORM</span>
+                </span>
+            </a>
 
-        <section aria-label="Conversation">
-            <div id="chat-messages" aria-live="polite">
-                <p>Your conversation will appear here.</p>
+            <div class="topbar-right">
+                <div class="workspace-label">
+                    <span class="status-indicator" aria-hidden="true"></span>
+                    Policy-grounded assistant
+                </div>
+                <span class="environment-label">AI WORKSPACE</span>
             </div>
+        </header>
 
-            <form id="chat-form">
-                <label for="question">Your question</label>
-                <textarea
-                    id="question"
-                    name="question"
-                    rows="3"
-                    maxlength="2000"
-                    placeholder="For example, what happens if I am charged twice?"
-                    required
-                ></textarea>
+        <div class="dashboard">
 
-                <button type="submit" id="send-button">
-                    Send question
-                </button>
-            </form>
-        </section>
+            <!-- Navigation -->
+            <aside class="sidebar" aria-label="Main navigation">
+                <div class="sidebar-heading">WORKSPACE</div>
 
-        <section aria-labelledby="sources-heading">
-            <h2 id="sources-heading">Sources</h2>
-            <div id="sources">
-                <p>Policy references will appear here.</p>
-            </div>
-        </section>
-    </main>
+                <a class="nav-link active" href="#support-workspace"
+                   aria-current="page">
+                    <span class="nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-5 4v-5.3A2.5 2.5 0 0 1 4 12.5v-7Z"
+                                  stroke="currentColor" stroke-width="1.7"
+                                  stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span>Support assistant</span>
+                </a>
+
+                <a class="nav-link" href="#sources-heading">
+                    <span class="nav-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M6 3.5h8l4 4V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"
+                                  stroke="currentColor" stroke-width="1.7"
+                                  stroke-linejoin="round"/>
+                            <path d="M14 3.5v5h4M8 13h8M8 17h8"
+                                  stroke="currentColor" stroke-width="1.7"
+                                  stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span>Policy evidence</span>
+                </a>
+
+                <div class="sidebar-divider"></div>
+
+                <div class="sidebar-heading">ABOUT THIS WORKSPACE</div>
+
+                <div class="sidebar-info">
+                    <span class="info-icon" aria-hidden="true">✓</span>
+                    <div>
+                        <strong>Evidence-first answers</strong>
+                        <p>Responses are generated using retrieved banking policy documents.</p>
+                    </div>
+                </div>
+
+                <div class="sidebar-info">
+                    <span class="info-icon" aria-hidden="true">i</span>
+                    <div>
+                        <strong>Verify before acting</strong>
+                        <p>Review available citations and policy evidence before relying on an answer.</p>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    <span class="footer-dot" aria-hidden="true"></span>
+                    <span>Banking Support AI</span>
+                </div>
+            </aside>
+
+            <!-- Main support workspace -->
+            <main class="workspace" id="support-workspace">
+
+                <section class="page-heading">
+                    <div>
+                        <div class="breadcrumb">Workspace <span>/</span> Support assistant</div>
+                        <h1>Customer support workspace</h1>
+                        <p>Find policy-grounded answers to banking questions, with evidence you can inspect.</p>
+                    </div>
+                    <div class="heading-badge">
+                        <span aria-hidden="true">◆</span>
+                        Retrieval-augmented AI
+                    </div>
+                </section>
+
+                <section class="chat-panel" aria-label="Banking support conversation">
+                    <div class="panel-header">
+                        <div class="assistant-identity">
+                            <div class="assistant-avatar" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12m8.48 8.48 2.12 2.12m0-12.72-2.12 2.12m-8.48 8.48-2.12 2.12"
+                                          stroke="currentColor" stroke-width="1.6"
+                                          stroke-linecap="round"/>
+                                    <circle cx="12" cy="12" r="5"
+                                            stroke="currentColor" stroke-width="1.6"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2>Banking Support Assistant</h2>
+                                <p>Ask about policies, fees and refunds</p>
+                            </div>
+                        </div>
+                        <span class="panel-status">
+                            <span class="status-indicator" aria-hidden="true"></span>
+                            Ready for questions
+                        </span>
+                    </div>
+
+                    <div class="chat-content" id="chat-messages" aria-live="polite"
+                         aria-relevant="additions text">
+                        <div class="welcome-panel" id="welcome-panel">
+                            <div class="welcome-kicker">HOW CAN WE HELP?</div>
+                            <h3>Get clarity on banking policies.</h3>
+                            <p>
+                                Enter a question below. The assistant will use
+                                available policy evidence to formulate a response
+                                and return relevant source references.
+                            </p>
+
+                            <div class="suggestion-heading">EXAMPLE QUESTIONS</div>
+                            <div class="suggestion-grid">
+                                <button class="suggestion-card" type="button"
+                                        data-question="What should I do if I am charged twice?">
+                                    <span class="suggestion-icon" aria-hidden="true">↗</span>
+                                    <span>
+                                        <strong>Duplicate transactions</strong>
+                                        <small>What should I do if I am charged twice?</small>
+                                    </span>
+                                    <span class="suggestion-arrow" aria-hidden="true">→</span>
+                                </button>
+
+                                <button class="suggestion-card" type="button"
+                                        data-question="Are card fee refunds guaranteed?">
+                                    <span class="suggestion-icon" aria-hidden="true">₦</span>
+                                    <span>
+                                        <strong>Card fees</strong>
+                                        <small>Are card fee refunds guaranteed?</small>
+                                    </span>
+                                    <span class="suggestion-arrow" aria-hidden="true">→</span>
+                                </button>
+
+                                <button class="suggestion-card" type="button"
+                                        data-question="How does the refund review process work?">
+                                    <span class="suggestion-icon" aria-hidden="true">↻</span>
+                                    <span>
+                                        <strong>Refund process</strong>
+                                        <small>How does the refund review process work?</small>
+                                    </span>
+                                    <span class="suggestion-arrow" aria-hidden="true">→</span>
+                                </button>
+
+                                <button class="suggestion-card" type="button"
+                                        data-question="What information should I provide about a disputed charge?">
+                                    <span class="suggestion-icon" aria-hidden="true">▤</span>
+                                    <span>
+                                        <strong>Disputed charges</strong>
+                                        <small>What information should I provide?</small>
+                                    </span>
+                                    <span class="suggestion-arrow" aria-hidden="true">→</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="composer-area">
+                        <form id="chat-form" class="chat-composer">
+                            <label class="visually-hidden" for="question">
+                                Your banking question
+                            </label>
+                            <textarea
+                                id="question"
+                                name="question"
+                                rows="2"
+                                maxlength="2000"
+                                placeholder="Enter your banking policy question..."
+                                required
+                            ></textarea>
+                            <div class="composer-toolbar">
+                                <span class="input-hint">Be specific for more relevant answers.</span>
+                                <button type="submit" id="send-button" class="send-button">
+                                    <span>Send question</span>
+                                    <span aria-hidden="true">↑</span>
+                                </button>
+                            </div>
+                        </form>
+                        <p class="disclaimer">
+                            AI-generated responses may be imperfect. Check cited policy evidence before acting.
+                        </p>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Evidence sidebar -->
+            <aside class="evidence-panel" aria-labelledby="sources-heading">
+                <div class="evidence-header">
+                    <div>
+                        <div class="section-eyebrow">KNOWLEDGE BASE</div>
+                        <h2 id="sources-heading">Policy evidence</h2>
+                    </div>
+                    <span class="source-count" id="source-count">—</span>
+                </div>
+
+                <p class="evidence-description">
+                    Inspect the policy references returned for your latest question.
+                </p>
+
+                <div class="evidence-status">
+                    <span class="evidence-status-icon" aria-hidden="true">✓</span>
+                    <div>
+                        <strong>Source transparency</strong>
+                        <p>References are provided by the support API.</p>
+                    </div>
+                </div>
+
+                <div id="sources" class="source-list" aria-live="polite">
+                    <div class="sources-empty">
+                        <span class="empty-document-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M6 3.5h8l4 4V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"
+                                      stroke="currentColor" stroke-width="1.6"
+                                      stroke-linejoin="round"/>
+                                <path d="M14 3.5v5h4M8 13h8M8 17h5"
+                                      stroke="currentColor" stroke-width="1.6"
+                                      stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <strong>No evidence to display yet</strong>
+                        <p>Submit a question to see the policy references returned by the assistant.</p>
+                    </div>
+                </div>
+
+                <div class="evidence-note">
+                    <div class="evidence-note-title">
+                        <span aria-hidden="true">i</span>
+                        Important
+                    </div>
+                    <p>
+                        Retrieved references support the generated response.
+                        They do not replace the full policy or an authorised
+                        review of a customer's circumstances.
+                    </p>
+                </div>
+            </aside>
+
+        </div>
+    </div>
 </body>
 </html>
+```

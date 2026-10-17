@@ -73,18 +73,42 @@ def generate_grounded_answer(
     state: ConversationState,
     generator: GroundedAnswerGenerator,
 ) -> dict:
-    """Generate a policy-grounded answer from the current question."""
+    """Generate a policy-grounded answer from the current question and attach retrieved excerpts."""
     question = state["question"].strip()
 
     if not question:
         raise ValueError("Question cannot be empty")
 
+    # reuse evidence already retrieved by the first graph node.
     results = state["retrieval_documents"]
     result = generator.answer_with_evidence(question, results)
 
+    # Index retrieved documents for matching against generated source references.
+    evidence_by_key = {
+        (item["source"], item["document_id"]): item for item in state["retrieval_results"]
+
+    }
+
+    enriched_sources = []
+
+    for source in result.sources:
+        source_data = dict(source)
+
+        key = (
+            source_data.get("source", "unknown"),
+            source_data.get("document_id", "unknown"),
+        )
+        evidence = evidence_by_key.get(key)
+
+        if evidence:
+            source_data["excerpt"] = evidence["content"].strip()
+            source_data["distance"] = evidence["distance"]
+
+        enriched_sources.append(source_data)
+
     return {
         "answer": result.answer,
-        "sources": result.sources,
+        "sources": enriched_sources,
         "retrieval_results": result.retrieval_results,
         "abstained": result.abstained,
         "error": None,

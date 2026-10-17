@@ -4,56 +4,93 @@ const questionInput = document.getElementById("question");
 const sendButton = document.getElementById("send-button");
 const messages = document.getElementById("chat-messages");
 const sourcesPanel = document.getElementById("sources");
+const sourceCount = document.getElementById("source-count");
 
 let busy = false;
 
-function addMessage(text, role = "assistant") {
+function addMessage(text, role = "assistant", meta = "") {
     const message = document.createElement("div");
     message.className = `message ${role}`;
+
+    // Use textContent so model output cannot inject HTML.
     message.textContent = text;
+
+    if (meta) {
+        const metadata = document.createElement("small");
+        metadata.className = "message-meta";
+        metadata.textContent = meta;
+        message.appendChild(metadata);
+    }
+
     messages.appendChild(message);
     messages.scrollTop = messages.scrollHeight;
+
     return message;
 }
 
-function renderSources(sources) {
+function renderSources(sources = []) {
     sourcesPanel.replaceChildren();
+
+    if (sourceCount) {
+        sourceCount.textContent = `${sources.length} source${
+            sources.length === 1 ? "" : "s"
+        }`;
+    }
 
     if (!sources.length) {
         const empty = document.createElement("p");
-        empty.textContent = "No supporting sources were returned.";
+        empty.className = "sources-empty";
+        empty.textContent =
+            "No supporting policy sources were returned.";
         sourcesPanel.appendChild(empty);
         return;
     }
 
     for (const source of sources) {
-        const item = document.createElement("div");
+        const item = document.createElement("details");
         item.className = "source-item";
 
-        const title = document.createElement("strong");
+        const title = document.createElement("summary");
         title.textContent =
-            `[${source.citation_id || "Source"}] ${source.source || "Policy document"}`;
+            `[${source.citation_id || "Source"}] ` +
+            (source.source || "Policy document");
 
-        const details = document.createElement("small");
-        details.textContent =
-            `Document: ${source.document_id || "Unknown"} · ` +
-            `Distance: ${
+        const details = document.createElement("div");
+        details.className = "source-details";
+
+        const documentId = document.createElement("p");
+        documentId.textContent =
+            `Document ID: ${source.document_id || "Unknown"}`;
+
+        const distance = document.createElement("p");
+        distance.textContent =
+            `Retrieval distance: ${
                 typeof source.distance === "number"
                     ? source.distance.toFixed(3)
-                    : "N/A"
+                    : "Not available"
             }`;
 
+        const note = document.createElement("p");
+        note.textContent =
+            "The API currently returns source metadata, not policy text excerpts.";
+
+        details.append(documentId, distance, note);
         item.append(title, details);
         sourcesPanel.appendChild(item);
     }
 }
 
-form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const question = questionInput.value.trim();
+async function submitQuestion(value) {
+    const question = (value ?? questionInput.value).trim();
 
     if (!question || busy) return;
+
+    if (question.length > 2000) {
+        addMessage(
+            "Please keep your question within 2,000 characters."
+        );
+        return;
+    }
 
     busy = true;
     sendButton.disabled = true;
@@ -61,7 +98,11 @@ form.addEventListener("submit", async (event) => {
     addMessage(question, "user");
     questionInput.value = "";
 
-    const loading = addMessage("Searching policy evidence…");
+    const loading = addMessage(
+        "Searching policy evidence and generating an answer…",
+        "assistant"
+    );
+
     renderSources([]);
 
     try {
@@ -77,15 +118,21 @@ form.addEventListener("submit", async (event) => {
         const result = await response.json().catch(() => ({}));
 
         if (!response.ok) {
-            throw new Error(
-                result.detail || `Request failed with status ${response.status}`
-            );
+            const detail = typeof result.detail === "string"
+                ? result.detail
+                : `Request failed with status ${response.status}`;
+
+            throw new Error(detail);
         }
 
         loading.remove();
 
         addMessage(
-            result.answer || "The assistant returned an empty answer."
+            result.answer || "The assistant returned an empty answer.",
+            "assistant",
+            result.abstained
+                ? "The answer could not be verified from available policy evidence."
+                : "Generated using retrieved policy evidence."
         );
 
         renderSources(
@@ -93,27 +140,48 @@ form.addEventListener("submit", async (event) => {
         );
 
         if (result.error) {
-            addMessage(`Notice: ${result.error}`);
+            addMessage(`Notice: ${result.error}`, "assistant");
         }
     } catch (error) {
         loading.remove();
 
+        let message;
+
         if (error.name === "TimeoutError") {
-            addMessage(
-                "The request took too long. Please try again."
-            );
-        }
-        else {
-            addMessage(
-                `Unable to get an answer: ${error.message}`
-            );
+            message =
+                "The request timed out. Please try again.";
+        } else if (error.name === "TypeError") {
+            message =
+                "Could not connect to the API. Check that the FastAPI server is running.";
+        } else {
+            message = `Unable to get an answer: ${error.message}`;
         }
 
+        addMessage(message, "assistant");
         questionInput.value = question;
-        
     } finally {
         busy = false;
         sendButton.disabled = false;
         questionInput.focus();
+    }
+}
+
+form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    submitQuestion();
+});
+
+// Connect the suggested-question cards in the HTML.
+document.querySelectorAll("[data-question]").forEach((button) => {
+    button.addEventListener("click", () => {
+        submitQuestion(button.dataset.question);
+    });
+});
+
+// Submit with Enter; use Shift+Enter for a new line.
+questionInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        submitQuestion();
     }
 });

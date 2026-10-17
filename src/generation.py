@@ -70,14 +70,25 @@ class GroundedAnswerGenerator:
             max_tokens = int(os.getenv("OPENROUTER_MAX_TOKENS", "12000"))
             if max_tokens < 1:
                 raise ValueError("OPENROUTER_MAX_TOKENS must be positive")
+
             
+            timeout_seconds = float(
+            os.getenv("OPENROUTER_TIMEOUT_SECONDS", "60")
+            )
+
+            if timeout_seconds <= 0:
+                raise ValueError("OPENROUTER_TIMEOUT_SECONDS must be positive")
+ 
             self.llm = ChatOpenAI(
                 model=model,
                 api_key=api_key,
                 base_url="https://openrouter.ai/api/v1",
                 temperature=0,
                 max_tokens=max_tokens,
+                timeout=timeout_seconds,
+                max_retries=2
             )
+
 
         self.prompt = ChatPromptTemplate.from_messages(
             [
@@ -211,7 +222,8 @@ Provide a grounded answer with source citations.
         raw_answer = raw_answer.strip()
 
         if not raw_answer:
-            finish_reason = response.response_metadata.get(
+            metadata = getattr(response, "response_metadata", {}) or {}
+            finish_reason = metadata.get(
                 "finish_reason", "unknown"
             )
 
