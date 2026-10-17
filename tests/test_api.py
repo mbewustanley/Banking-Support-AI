@@ -1,8 +1,14 @@
+import pytest
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
 from src.api import app
+
+@pytest.fixture(autouse=True)
+def mock_banking_support_service():
+    with patch("src.api.BankingSupportService"):
+        yield
 
 
 def test_health_endpoint():
