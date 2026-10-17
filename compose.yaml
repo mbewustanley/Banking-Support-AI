@@ -1,0 +1,19 @@
+
+services:
+  banking-support-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: banking-support-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      CHROMA_PERSIST_DIRECTORY: /app/data/vector_store/chroma
+    volumes:
+      - banking_chroma_data:/app/data/vector_store/chroma
+    restart: unless-stopped
+
+volumes:
+  banking_chroma_data:

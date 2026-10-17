@@ -4,7 +4,7 @@ SEMANTIC RETRIEVAL
 - with vector database local persistence
 """
 
-
+import os
 from pathlib import Path
 
 from langchain_chroma import Chroma
@@ -21,11 +21,20 @@ class PolicyRetriever:
     def __init__(
         self,
         policy_dir: str = "knowledge_base/policies",
-        persist_directory: str = "data/vector_store/chroma",
+        #persist_directory: str = "data/vector_store/chroma",
+        persist_directory: str | None =  None,
         model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
         embeddings: Embeddings | None = None,
     ) -> None:
-        self.persist_directory = str(Path(persist_directory))
+        self.persist_directory = str(
+            Path(
+                persist_directory
+                or os.getenv(
+                    "CHROMA_PERSIST_DIRECTORY",
+                    "data/vector_store/chroma",
+                )
+            )
+        )
         Path(self.persist_directory).parent.mkdir(
             parents=True, exist_ok=True
         )

@@ -3,7 +3,12 @@
 
 ####### TO RUN
 # uvicorn src.api:app --reload
+import time
+import uuid
+
 import logging
+from src.logging_config import configure_logging
+
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +22,7 @@ from contextlib import asynccontextmanager
 
 from src.service import BankingSupportService
 
+configure_logging()
 logger = logging.getLogger(__name__)
 
 # creates a service when the application starts and releases the reference when it shuts down.
@@ -36,6 +42,47 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan
 )
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    """Log request IDs, status codes, and request duration."""
+    request_id = str(uuid.uuid4())
+    start_time = time.perf_counter()
+
+    try:
+        response = await call_next(request)
+        duration_ms = (time.perf_counter() - start_time) * 1000
+
+        response.headers["X-Request-ID"] = request_id
+
+        logger.info(
+            "HTTP request completed",
+            extra={
+                "request_id": request_id,
+                "method": request.method,
+                "path": request.url.path,
+                "status_code": response.status_code,
+                "duration_ms": round(duration_ms, 2),
+            },
+        )
+
+        return response
+
+    except Exception:
+        duration_ms = (time.perf_counter() - start_time) * 1000
+
+        logger.exception(
+            "HTTP request failed",
+            extra={
+                "request_id": request_id,
+                "method": request.method,
+                "path": request.url.path,
+                "duration_ms": round(duration_ms, 2),
+            },
+        )
+        raise
+
 
 
 BASE_DIR = Path(__file__).resolve().parent

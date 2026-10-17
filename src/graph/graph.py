@@ -15,10 +15,17 @@ def build_support_graph(
     generator: GroundedAnswerGenerator | None = None,
 ):
     """Build and compile the banking support workflow."""
-    retriever = retriever or PolicyRetriever()
-    generator = generator or GroundedAnswerGenerator(
-        retriever=retriever
-    )
+
+    if retriever is None:
+        retriever = PolicyRetriever()
+
+        # Initialize the policy index on first startup only.
+        existing = retriever.vector_store.get()
+        if not existing.get("ids"):
+            retriever.build_index()
+
+    if generator is None:
+        generator = GroundedAnswerGenerator(retriever=retriever)
 
     workflow = StateGraph(ConversationState)
 
