@@ -51,7 +51,11 @@ class GroundedAnswerGenerator:
         if k < 1:
             raise ValueError("k must be at least 1")
 
-        self.retriever = retriever or PolicyRetriever()
+        # keep retriever optional
+        # MCP-Based workflows can supply evidence directly without 
+        # loading another embedding model in this process
+        self.retriever = retriever
+
         self.k = k
 
         # Inject an LLM in tests to avoid live API calls.
@@ -172,10 +176,19 @@ Provide a grounded answer with source citations.
     
     def answer(self, question: str) -> GenerationResult:
         """Retrieve evidence and generate a citation-validated answer."""
+
         if not question or not question.strip():
             raise ValueError("Question cannot be empty")
 
         question = question.strip()
+
+        # Initialize the retriever only when direct retrieval is requested.
+        # this preserves the original answer() functionality while avoiding
+        # unnecessary embedding-model loading in MCP based workflows
+        if self.retriever is None:
+            self.retriever = PolicyRetriever()
+
+            
         results = self.retriever.search(question, k=self.k)
 
         return self.answer_with_evidence(question, results)

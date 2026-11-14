@@ -1487,3 +1487,63 @@ svg {
         transition-duration: 0.01ms !important;
     }
 }
+
+
+
+
+/* =========================================================
+   Assistant mode selector - RAG / MCP
+   ========================================================= */
+
+.chat-mode-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.chat-mode-controls label {
+    color: var(--navy-900);
+    font-size: 10px;
+    font-weight: 750;
+}
+
+.chat-mode-controls select {
+    min-height: 34px;
+    padding: 0 30px 0 10px;
+
+    color: var(--navy-900);
+    background: #f4f8ff;
+    border: 1px solid var(--border-strong);
+    border-radius: 7px;
+
+    font: inherit;
+    font-size: 10px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.chat-mode-controls select:focus-visible {
+    outline: 3px solid rgb(53 116 190 / 30%);
+    outline-offset: 2px;
+}
+
+.chat-mode-controls select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.chat-mode-controls span {
+    color: var(--text-subtle);
+    font-size: 9px;
+}
+
+@media (max-width: 390px) {
+    .chat-mode-controls {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+    }
+}
+

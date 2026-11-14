@@ -193,30 +193,56 @@
                     </div>
 
                     <div class="composer-area">
-                        <form id="chat-form" class="chat-composer">
-                            <label class="visually-hidden" for="question">
-                                Your banking question
-                            </label>
-                            <textarea
-                                id="question"
-                                name="question"
-                                rows="2"
-                                maxlength="2000"
-                                placeholder="Enter your banking policy question..."
-                                required
-                            ></textarea>
-                            <div class="composer-toolbar">
-                                <span class="input-hint">Be specific for more relevant answers.</span>
-                                <button type="submit" id="send-button" class="send-button">
-                                    <span>Send question</span>
-                                    <span aria-hidden="true">↑</span>
-                                </button>
-                            </div>
-                        </form>
-                        <p class="disclaimer">
-                            AI-generated responses may be imperfect. Check cited policy evidence before acting.
-                        </p>
+
+                    <!-- Allows the user to choose between the existing RAG workflow
+                        and the new MCP-enabled agent workflow. -->
+                    <div class="chat-mode-controls">
+                        <label for="chat-mode">Assistant mode</label>
+
+                        <select id="chat-mode" name="chat-mode">
+                            <option value="rag">Standard RAG</option>
+                            <option value="mcp">MCP Agent</option>
+                        </select>
+
+                        <span id="mode-description">
+                            Direct retrieval and grounded answer generation.
+                        </span>
                     </div>
+
+                    <!-- Keep one chat form for both workflows.
+                        JavaScript will decide which backend endpoint to call. -->
+                    <form id="chat-form" class="chat-composer">
+                        <label class="visually-hidden" for="question">
+                            Your banking question
+                        </label>
+
+                        <textarea
+                            id="question"
+                            name="question"
+                            rows="2"
+                            maxlength="2000"
+                            placeholder="Enter your banking policy question..."
+                            required
+                        ></textarea>
+
+                        <div class="composer-toolbar">
+                            <span class="input-hint">
+                                Be specific for more relevant answers.
+                            </span>
+
+                            <button type="submit" id="send-button" class="send-button">
+                                <span>Send question</span>
+                                <span aria-hidden="true">↑</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <p class="disclaimer">
+                        AI-generated responses may be imperfect.
+                        Check cited policy evidence before acting.
+                    </p>
+
+                </div>
                 </section>
             </main>
 
